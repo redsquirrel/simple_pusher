@@ -15,6 +15,9 @@ exports.trigger = function(config, channel, eventName, data, callback) {
 function buildRequest(config, channel, eventName, data) {
   var requestPath = buildRequestPath(config, channel, eventName, data);
   var client = http.createClient(80, domain);
+  client.addListener('error', function(error) {
+    sys.error("Client error: " + error);
+  })
   return client.request('POST', requestPath, {
     'host': domain,
     'Content-Type': 'application/json',
